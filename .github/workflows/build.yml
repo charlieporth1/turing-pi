@@ -38,10 +38,13 @@ jobs:
         if: steps.new_version.conclusion == 'success'      
         run: rm -rf tailscale_*.tgz
 
+      - run: rm -rf turing-pi/
       - run: git clone https://github.com/wenyi0421/turing-pi
-      - run: rm -rf turing-pi/.git
-      - run: cp -rf turing-pi/* .
-      - run: cp -rf turing-pi/.* .
+      - run: rm -rf turing-pi/.git; exit 0
+
+      - run: cp -rf turing-pi/* .; exit 0
+      - run: cp -rf turing-pi/.* .; exit 0
+
       - run: git pull -ff; exit 0
       - run: export RELEASE_VERSION=${{ env.RELEASE_VERSION_TPI }}+ts-$${{ env.RELEASE_VERSION_TS }}; echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
 
