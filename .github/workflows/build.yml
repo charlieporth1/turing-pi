@@ -40,13 +40,16 @@ jobs:
       - run: rm -rf tailscale_*.tgz
 
       - id: install_reqs
+        if: steps.new_version.conclusion == 'success'      
         run: apt-get -y install build-essential subversion git-core libncurses5-dev zlib1g-dev gawk flex quilt libssl-dev xsltproc libxml-parser-perl mercurial bzr ecj cvs unzip lib32z1 lib32z1-dev lib32stdc++6 libstdc++6 libncurses-dev u-boot-tools mkbootimg
 
       - id: add_ts
+        if: steps.new_version.conclusion == 'success'      
         run:  | \
 	     ARCH=arm bash ctp-scripts/build.sh
 
       - id: build
+        if: steps.new_version.conclusion == 'success'      
         run:  | \
             cd buildroot
             cd buildroot
@@ -55,6 +58,7 @@ jobs:
             make V=1
 
       - id: update_config
+        if: steps.new_version.conclusion == 'success'      
         run: | \
             cd ../
             cp bmc4tpi/config/sun8iw20p1* buildroot/output/build/linux-5112fdd843715f1615703ca5ce2a06c1abe5f9ee/arch/arm/boot/dts/
@@ -66,6 +70,7 @@ jobs:
             cp bmc4tpi/swupdate/env1.fex buildroot/output/images/
 
       - id: rebuild
+        if: steps.new_version.conclusion == 'success'      
         run: | \
             cd buildroot
             make linux-rebuild
@@ -73,11 +78,13 @@ jobs:
             make V=1	//build img
 
       - id: build_swu
+        if: steps.new_version.conclusion == 'success'      
         run: | \
             cd output/images/
            ./genSWU.sh ${{ env.RELEASE_VERSION_TPI }}+ts-$${{ env.RELEASE_VERSION_TS }}	//build swu
 
       - id: build_img
+        if: steps.new_version.conclusion == 'success'      
         run: | \
            cd output/images/
            ./mkfw.sh ${{ env.RELEASE_VERSION_TPI }}+ts-$${{ env.RELEASE_VERSION_TS }}
