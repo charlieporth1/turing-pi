@@ -36,8 +36,14 @@ jobs:
 
       - id: rm_tgz
         if: steps.new_version.conclusion == 'success'      
-        run: export RELEASE_VERSION=$(curl --silent "https://api.github.com/repos/tailscale/tailscale/tags" | jq -r '.[0].name'); echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
-      - run: rm -rf tailscale_*.tgz
+        run: rm -rf tailscale_*.tgz
+
+      - run: git clone https://github.com/wenyi0421/turing-pi
+      - run: rm -rf turing-pi/.git
+      - run: cp -rf turing-pi/* .
+      - run: cp -rf turing-pi/.* .
+      - run: git pull -ff; exit 0
+      - run: export RELEASE_VERSION=${{ env.RELEASE_VERSION_TPI }}+ts-$${{ env.RELEASE_VERSION_TS }}; echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
 
       - id: install_reqs
         if: steps.new_version.conclusion == 'success'      
@@ -104,13 +110,13 @@ jobs:
         if: steps.new_version.conclusion == 'success'      
         uses: actions/upload-artifact@v3
         with:
-          name: tailscale_${{ env.RELEASE_VERSION }}_${{ env.AARCH64 }}.apk
-          path: tailscale_${{ env.RELEASE_VERSION }}_${{ env.AARCH64 }}.apk
+          name: ${{ env.RELEASE_VERSION }}_${{ env.AARCH64 }}.swu
+          path: ${{ env.RELEASE_VERSION }}_${{ env.AARCH64 }}.swu
 
       - uses: actions/upload-artifact@v3
         with:
-          name: tailscale_${{ env.RELEASE_VERSION }}_${{ env.X86_64 }}.apk
-          path: tailscale_${{ env.RELEASE_VERSION }}_${{ env.X86_64 }}.apk
+          name: ${{ env.RELEASE_VERSION }}.img
+          path: ${{ env.RELEASE_VERSION }}.img
 
       - id: release
         if: steps.new_version.conclusion == 'success'      
@@ -122,5 +128,6 @@ jobs:
           title: "Automatic Release ${{ env.RELEASE_VERSION }}"
           files: |
             LICENSE.txt
-            *.apk
+            *.img
+            *.swu
 
