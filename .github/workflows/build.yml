@@ -30,9 +30,9 @@ jobs:
         run: exit 0
 
       - id: checkout
-        if: steps.new_version.conclusion == 'success'      
         uses: actions/checkout@v3
         name: Auto Builder
+#        if: steps.new_version.conclusion == 'success'      
 
       - id: rm_tgz
         if: steps.new_version.conclusion == 'success'      
@@ -101,8 +101,8 @@ jobs:
       - id: commit
         if: steps.new_version.conclusion == 'success'      
         run: sudo ls -R
-      - run: sudo git config --local user.name github-actions
-      - run: sudo git config --local user.email github-actions@github.com
+      - run: sudo git config user.name github-actions
+      - run: sudo git config user.email github-actions@github.com
       - run: sudo git add .
       - run: sudo git commit -m "Automatic Version Build from GitHub Action at `date` ${{ env.RELEASE_VERSION }}"
       - run: sudo git tag -a ${{ env.RELEASE_VERSION }} -m "Automatic tag ${{ env.RELEASE_VERSION }}"
