@@ -46,7 +46,7 @@ jobs:
       - run: bash -c "cp -rf turing-pi/.* .; exit 0"
 
 #      - run: git pull -ff; exit 0
-      - run: export RELEASE_VERSION=${{ env.RELEASE_VERSION_TPI }}+ts-$${{ env.RELEASE_VERSION_TS }}; echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+      - run: export RELEASE_VERSION=${{ env.RELEASE_VERSION_TPI }}+ts_$${{ env.RELEASE_VERSION_TS }}; echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
 
       - id: install_reqs
         if: steps.new_version.conclusion == 'success'      
@@ -89,13 +89,13 @@ jobs:
         if: steps.new_version.conclusion == 'success'      
         run: |
             cd output/images/
-            ./genSWU.sh ${{ env.RELEASE_VERSION_TPI }}+ts-$${{ env.RELEASE_VERSION_TS }}
+            ./genSWU.sh ${{ env.RELEASE_VERSION }}
 
       - id: build_img
         if: steps.new_version.conclusion == 'success'      
         run: |
             cd output/images/
-            ./mkfw.sh ${{ env.RELEASE_VERSION_TPI }}+ts-$${{ env.RELEASE_VERSION_TS }}
+            ./mkfw.sh ${{ env.RELEASE_VERSION }}
 
 
       - id: commit
