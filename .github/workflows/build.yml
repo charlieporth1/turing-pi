@@ -49,7 +49,7 @@ jobs:
 
       - id: build
         if: steps.new_version.conclusion == 'success'      
-        run: | \
+        run: |
             cd buildroot
             cd buildroot
             make BR2_EXTERNAL="../br2t113pro"  100ask_t113-pro_spinand_core_defconfig
@@ -58,7 +58,7 @@ jobs:
 
       - id: update_config
         if: steps.new_version.conclusion == 'success'      
-        run: | \
+        run: |
             cd ../
             cp bmc4tpi/config/sun8iw20p1* buildroot/output/build/linux-5112fdd843715f1615703ca5ce2a06c1abe5f9ee/arch/arm/boot/dts/
             cp bmc4tpi/config/kernelconfig buildroot/output/build/linux-5112fdd843715f1615703ca5ce2a06c1abe5f9ee/.config
@@ -70,7 +70,7 @@ jobs:
 
       - id: rebuild
         if: steps.new_version.conclusion == 'success'      
-        run: | \
+        run: |
             cd buildroot
             make linux-rebuild
             make swupdate-rebuild
@@ -78,13 +78,13 @@ jobs:
 
       - id: build_swu
         if: steps.new_version.conclusion == 'success'      
-        run: | \
+        run: |
             cd output/images/
            ./genSWU.sh ${{ env.RELEASE_VERSION_TPI }}+ts-$${{ env.RELEASE_VERSION_TS }}	//build swu
 
       - id: build_img
         if: steps.new_version.conclusion == 'success'      
-        run: | \
+        run: |
            cd output/images/
            ./mkfw.sh ${{ env.RELEASE_VERSION_TPI }}+ts-$${{ env.RELEASE_VERSION_TS }}
 
