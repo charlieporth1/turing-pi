@@ -57,7 +57,6 @@ jobs:
         run: chmod +x ./ctp-scripts/*.sh
       - run: ARCH=arm ./ctp-scripts/build.sh
 
-      - run: ls -R
 
       - id: build
         if: steps.new_version.conclusion == 'success'      
@@ -100,7 +99,7 @@ jobs:
             cd output/images/
             ./mkfw.sh ${{ env.RELEASE_VERSION }}
 
-      - run: ls -R
+      - run: ls -R output/images/*
 
       - run: |
             cp -rf output/images/*.swg .
