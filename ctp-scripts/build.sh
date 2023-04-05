@@ -15,4 +15,3 @@ cp -rf ${NAME}/tailscaled br2t113pro/board/100ask/rootfs_overlay/bin/tailscaled
 chmod +x br2t113pro/board/100ask/rootfs_overlay/bin/tailscale
 chmod +x br2t113pro/board/100ask/rootfs_overlay/bin/tailscaled
 
-chmod +x ./apk/CONTROL/start-stop.sh
