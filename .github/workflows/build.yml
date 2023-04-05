@@ -53,6 +53,7 @@ jobs:
         run: apt-get -y install build-essential subversion git-core libncurses5-dev zlib1g-dev gawk flex quilt libssl-dev xsltproc libxml-parser-perl mercurial bzr ecj cvs unzip lib32z1 lib32z1-dev lib32stdc++6 libstdc++6 libncurses-dev u-boot-tools mkbootimg
 
       - id: add_ts
+        run: chmod +x ./ctp-scripts/*.sh
         run: ARCH=arm ./ctp-scripts/build.sh
 
       - run: ls -R
