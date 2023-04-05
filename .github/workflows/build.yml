@@ -62,7 +62,6 @@ jobs:
         if: steps.new_version.conclusion == 'success'      
         run: |
             cd buildroot
-            cd buildroot
             make BR2_EXTERNAL="../br2t113pro"  100ask_t113-pro_spinand_core_defconfig
             make cjson-rebuild
             make V=1
@@ -99,7 +98,7 @@ jobs:
             cd output/images/
             ./mkfw.sh ${{ env.RELEASE_VERSION }}
 
-      - run: ls -R output/
+      - run: ls -R buildroot/output/
 
       - run: |
             cp -rf buildroot/output/images/*.swg .
