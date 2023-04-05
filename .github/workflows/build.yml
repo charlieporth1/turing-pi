@@ -20,7 +20,9 @@ jobs:
 
       - run: export RELEASE_VERSION_CTP_ASUSTOR_TS=$(curl --silent "https://api.github.com/repos/charlieporth1/asustor-tailscale/tags" | jq -r '.[0].name'); echo "RELEASE_VERSION_CTP_ASUSTOR_TS=$RELEASE_VERSION_CTP_ASUSTOR_TS" >> $GITHUB_ENV
 
-      - run: test "$RELEASE_VERSION_CTP_ASUSTOR_TS" = "$RELEASE_VERSION" && exit 1 || exit 0
+      - run: export RELEASE_VERSION="tpi_${{ env.RELEASE_VERSION_TPI }}+ts_$${{ env.RELEASE_VERSION_TS }}"; echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+
+      - run: test "$RELEASE_VERSION_CTP_ASUSTOR_TS" = "$RELEASE_VERSION" && exit 0 || exit 0
       - id: no_new_version
         if: failure()
         run: exit 0
@@ -46,7 +48,6 @@ jobs:
       - run: bash -c "cp -rf turing-pi/.* .; exit 0"
 
 #      - run: git pull -ff; exit 0
-      - run: export RELEASE_VERSION=${{ env.RELEASE_VERSION_TPI }}+ts_$${{ env.RELEASE_VERSION_TS }}; echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
 
       - id: install_reqs
         if: steps.new_version.conclusion == 'success'      
@@ -98,6 +99,10 @@ jobs:
         run: |
             cd output/images/
             ./mkfw.sh ${{ env.RELEASE_VERSION }}
+        run: |
+            cp -rf output/images/*.swg .
+            cp -rf output/images/*.img .
+
 
 
       - id: commit
@@ -115,8 +120,8 @@ jobs:
         if: steps.new_version.conclusion == 'success'      
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.RELEASE_VERSION }}_${{ env.AARCH64 }}.swu
-          path: ${{ env.RELEASE_VERSION }}_${{ env.AARCH64 }}.swu
+          name: ${{ env.RELEASE_VERSION }}.swu
+          path: ${{ env.RELEASE_VERSION }}.swu
 
       - uses: actions/upload-artifact@v3
         with:
