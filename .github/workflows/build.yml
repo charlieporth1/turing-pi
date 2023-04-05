@@ -45,12 +45,11 @@ jobs:
 
       - id: add_ts
         if: steps.new_version.conclusion == 'success'      
-        run:  | \
-	     ARCH=arm bash ctp-scripts/build.sh
+        run: ARCH=arm bash ctp-scripts/build.sh
 
       - id: build
         if: steps.new_version.conclusion == 'success'      
-        run:  | \
+        run: | \
             cd buildroot
             cd buildroot
             make BR2_EXTERNAL="../br2t113pro"  100ask_t113-pro_spinand_core_defconfig
