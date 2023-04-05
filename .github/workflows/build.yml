@@ -1,0 +1,120 @@
+name: GitHub Actions Auto Builder CI
+env:
+   ARCH: arm
+
+on:
+  push:
+  schedule:
+    - cron: '0 6 * * *'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - id: new_version_ts
+        name: Early exit if no new version
+        run: export RELEASE_VERSION_TS=$(curl --silent "https://api.github.com/repos/tailscale/tailscale/tags" | jq -r '.[0].name'); echo "RELEASE_VERSION_TS=$RELEASE_VERSION_TS" >> $GITHUB_ENV
+
+      - id: new_version_tpi
+        name: Early exit if no new version
+        run: export RELEASE_VERSION_TPI=$(curl --silent "https://api.github.com/repos/wenyi0421/turing-pi/tags" | jq -r '.[0].name'); echo "RELEASE_VERSION_TPI=$RELEASE_VERSION_TPI" >> $GITHUB_ENV
+
+      - run: export RELEASE_VERSION_CTP_ASUSTOR_TS=$(curl --silent "https://api.github.com/repos/charlieporth1/asustor-tailscale/tags" | jq -r '.[0].name'); echo "RELEASE_VERSION_CTP_ASUSTOR_TS=$RELEASE_VERSION_CTP_ASUSTOR_TS" >> $GITHUB_ENV
+
+      - run: test "$RELEASE_VERSION_CTP_ASUSTOR_TS" = "$RELEASE_VERSION" && exit 1 || exit 0
+      - id: no_new_version
+        if: failure()
+        run: exit 0
+
+      - id: no_new_version_alt
+        if: steps.new_version.conclusion == 'failure'
+        run: exit 0
+
+      - id: checkout
+        if: steps.new_version.conclusion == 'success'      
+        uses: actions/checkout@v3
+        name: Auto Builder
+
+      - id: build
+        if: steps.new_version.conclusion == 'success'      
+        run: export RELEASE_VERSION=$(curl --silent "https://api.github.com/repos/tailscale/tailscale/tags" | jq -r '.[0].name'); echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+      - run: rm -rf tailscale_*.tgz
+
+      - id: install_reqs
+        run: apt-get -y install build-essential subversion git-core libncurses5-dev zlib1g-dev gawk flex quilt libssl-dev xsltproc libxml-parser-perl mercurial bzr ecj cvs unzip lib32z1 lib32z1-dev lib32stdc++6 libstdc++6 libncurses-dev u-boot-tools mkbootimg
+
+      - id: add_ts
+        run:  | \
+	     ARCH=arm bash ctp-scripts/build.sh
+
+      - id: build
+        run:  | \
+            cd buildroot
+            cd buildroot
+            make BR2_EXTERNAL="../br2t113pro"  100ask_t113-pro_spinand_core_defconfig
+            make cjson-rebuild
+            make V=1
+
+      - id: update_config
+        run: | \
+            cd ../
+            cp bmc4tpi/config/sun8iw20p1* buildroot/output/build/linux-5112fdd843715f1615703ca5ce2a06c1abe5f9ee/arch/arm/boot/dts/
+            cp bmc4tpi/config/kernelconfig buildroot/output/build/linux-5112fdd843715f1615703ca5ce2a06c1abe5f9ee/.config
+            cp bmc4tpi/config/swupdateconfig buildroot/output/build/swupdate-2021.11/.config
+            cp bmc4tpi/swupdate/sw-description buildroot/output/images/
+            cp bmc4tpi/swupdate/genSWU.sh buildroot/output/images/
+            cp bmc4tpi/swupdate/env0.fex buildroot/output/images/
+            cp bmc4tpi/swupdate/env1.fex buildroot/output/images/
+
+      - id: rebuild
+        run: | \
+            cd buildroot
+            make linux-rebuild
+            make swupdate-rebuild
+            make V=1	//build img
+
+      - id: build_swu
+        run: | \
+            cd output/images/
+           ./genSWU.sh ${{ env.RELEASE_VERSION_TPI }}+ts-$${{ env.RELEASE_VERSION_TS }}	//build swu
+
+      - id: build_img
+        run: | \
+           cd output/images/
+           ./mkfw.sh ${{ env.RELEASE_VERSION_TPI }}+ts-$${{ env.RELEASE_VERSION_TS }}
+
+
+      - id: commit
+        if: steps.new_version.conclusion == 'success'      
+        run: sudo ls -R
+      - run: sudo git config --local user.name github-actions
+      - run: sudo git config --local user.email github-actions@github.com
+      - run: sudo git add .
+      - run: sudo git commit -m "Automatic Version Build from GitHub Action at `date` ${{ env.RELEASE_VERSION }}"
+      - run: sudo git tag -a ${{ env.RELEASE_VERSION }} -m "Automatic tag ${{ env.RELEASE_VERSION }}"
+      - run: sudo git push origin ${{ env.RELEASE_VERSION }}
+      - run: sudo git push origin HEAD:master
+
+      - id: upload
+        if: steps.new_version.conclusion == 'success'      
+        uses: actions/upload-artifact@v3
+        with:
+          name: tailscale_${{ env.RELEASE_VERSION }}_${{ env.AARCH64 }}.apk
+          path: tailscale_${{ env.RELEASE_VERSION }}_${{ env.AARCH64 }}.apk
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: tailscale_${{ env.RELEASE_VERSION }}_${{ env.X86_64 }}.apk
+          path: tailscale_${{ env.RELEASE_VERSION }}_${{ env.X86_64 }}.apk
+
+      - id: release
+        if: steps.new_version.conclusion == 'success'      
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: ${{ env.RELEASE_VERSION }}
+          prerelease: true
+          title: "Automatic Release ${{ env.RELEASE_VERSION }}"
+          files: |
+            LICENSE.txt
+            *.apk
+
