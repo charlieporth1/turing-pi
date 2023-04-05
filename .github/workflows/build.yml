@@ -99,7 +99,7 @@ jobs:
         run: |
             cd output/images/
             ./mkfw.sh ${{ env.RELEASE_VERSION }}
-        run: |
+      - run: |
             cp -rf output/images/*.swg .
             cp -rf output/images/*.img .
 
