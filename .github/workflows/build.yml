@@ -93,8 +93,9 @@ jobs:
             cp -rf *.swg ../../..
             cp -rf *.img ../../..
 #
-#            cp -rf buildroot/output/images/*.swg .
-#            cp -rf buildroot/output/images/*.img .
+      - run: |
+            cp -rf buildroot/output/images/*.swg .
+            cp -rf buildroot/output/images/*.img .
 
 
 
@@ -114,12 +115,12 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.RELEASE_VERSION }}.swu
-          path: ${{ env.RELEASE_VERSION }}.swu
+          path: buildroot/output/images/${{ env.RELEASE_VERSION }}.swu
 
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ env.RELEASE_VERSION }}.img
-          path: ${{ env.RELEASE_VERSION }}.img
+          path: buildroot/output/images/${{ env.RELEASE_VERSION }}.img
 
       - id: release
         if: steps.new_version.conclusion == 'success'      
@@ -131,6 +132,6 @@ jobs:
           title: "Automatic Release ${{ env.RELEASE_VERSION }}"
           files: |
             LICENSE.txt
-            *.img
-            *.swu
+            buildroot/output/images/*.img
+            buildroot/output/images/*.swu
 
