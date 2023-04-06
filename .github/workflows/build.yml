@@ -67,6 +67,7 @@ jobs:
       - run: cp bmc4tpi/swupdate/genSWU.sh buildroot/output/images/
       - run: cp bmc4tpi/swupdate/env0.fex buildroot/output/images/
       - run: cp bmc4tpi/swupdate/env1.fex buildroot/output/images/
+      - run: cp mkfw.sh buildroot/output/images/
 
       - id: rebuild
         run: cd buildroot; make linux-rebuild; make swupdate-rebuild; make V=1
