@@ -38,7 +38,7 @@ jobs:
 
       - id: rm_tgz
         if: steps.new_version.conclusion == 'success'      
-        run: rm -rf tailscale_*.tgz
+        run: rm -rf tailscale_*
 
       - run: rm -rf turing-pi/
       - run: git clone https://github.com/wenyi0421/turing-pi
@@ -66,10 +66,10 @@ jobs:
         if: steps.new_version.conclusion == 'success'      
         run: cp bmc4tpi/config/sun8iw20p1* buildroot/output/build/linux-5112fdd843715f1615703ca5ce2a06c1abe5f9ee/arch/arm/boot/dts/ 
       - run: cp bmc4tpi/config/kernelconfig buildroot/output/build/linux-5112fdd843715f1615703ca5ce2a06c1abe5f9ee/.config
-      - run: cp bmc4tpi/config/swupdateconfig buildroot/output/build/swupdate-2021.11/.config && \
-      - run: cp bmc4tpi/swupdate/sw-description buildroot/output/images/ && \
-      - run: cp bmc4tpi/swupdate/genSWU.sh buildroot/output/images/ && \
-      - run: cp bmc4tpi/swupdate/env0.fex buildroot/output/images/ && \
+      - run: cp bmc4tpi/config/swupdateconfig buildroot/output/build/swupdate-2021.11/.config
+      - run: cp bmc4tpi/swupdate/sw-description buildroot/output/images/
+      - run: cp bmc4tpi/swupdate/genSWU.sh buildroot/output/images/
+      - run: cp bmc4tpi/swupdate/env0.fex buildroot/output/images/
       - run: cp bmc4tpi/swupdate/env1.fex buildroot/output/images/
 
       - id: rebuild
