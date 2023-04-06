@@ -37,7 +37,6 @@ jobs:
 #        if: steps.new_version.conclusion == 'success'      
 
       - id: rm_tgz
-        if: steps.new_version.conclusion == 'success'      
         run: rm -rf tailscale_*
 
       - run: rm -rf turing-pi/
@@ -58,11 +57,9 @@ jobs:
 
 
       - id: build
-        if: steps.new_version.conclusion == 'success'      
         run: cd buildroot; make BR2_EXTERNAL="../br2t113pro"  100ask_t113-pro_spinand_core_defconfig; make cjson-rebuild; make V=1
 
       - id: update_config
-        if: steps.new_version.conclusion == 'success'      
         run: cp bmc4tpi/config/sun8iw20p1* buildroot/output/build/linux-5112fdd843715f1615703ca5ce2a06c1abe5f9ee/arch/arm/boot/dts/ 
       - run: cp bmc4tpi/config/kernelconfig buildroot/output/build/linux-5112fdd843715f1615703ca5ce2a06c1abe5f9ee/.config
       - run: cp bmc4tpi/config/swupdateconfig buildroot/output/build/swupdate-2021.11/.config
@@ -72,7 +69,6 @@ jobs:
       - run: cp bmc4tpi/swupdate/env1.fex buildroot/output/images/
 
       - id: rebuild
-        if: steps.new_version.conclusion == 'success'      
         run: cd buildroot; make linux-rebuild; make swupdate-rebuild; make V=1
 
       - run: ls -R buildroot/output/
