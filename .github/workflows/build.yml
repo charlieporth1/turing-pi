@@ -85,24 +85,16 @@ jobs:
             make linux-rebuild
             make swupdate-rebuild
             make V=1
-
-      - id: build_swu
-        if: steps.new_version.conclusion == 'success'      
-        run: |
+	    ls -R output/
             cd output/images/
             ./genSWU.sh ${{ env.RELEASE_VERSION }}
-
-      - id: build_img
-        if: steps.new_version.conclusion == 'success'      
-        run: |
             cd output/images/
             ./mkfw.sh ${{ env.RELEASE_VERSION }}
-
-      - run: ls -R buildroot/output/
-
-      - run: |
-            cp -rf buildroot/output/images/*.swg .
-            cp -rf buildroot/output/images/*.img .
+            cp -rf *.swg ../../..
+            cp -rf *.img ../../..
+#
+#            cp -rf buildroot/output/images/*.swg .
+#            cp -rf buildroot/output/images/*.img .
 
 
 
