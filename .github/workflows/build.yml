@@ -85,7 +85,7 @@ jobs:
             make linux-rebuild
             make swupdate-rebuild
             make V=1
-	    ls -R output/
+            ls -R output/
             cd output/images/
             ./genSWU.sh ${{ env.RELEASE_VERSION }}
             cd output/images/
