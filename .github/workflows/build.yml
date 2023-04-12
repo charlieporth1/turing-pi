@@ -95,7 +95,6 @@ jobs:
       - run: sudo git push origin HEAD:master
 
       - id: upload
-        if: steps.new_version.conclusion == 'success'      
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.RELEASE_VERSION }}.swu
@@ -107,7 +106,6 @@ jobs:
           path: buildroot/output/images/${{ env.RELEASE_VERSION_TPI }}.img
 
       - id: release
-        if: steps.new_version.conclusion == 'success'      
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
