@@ -117,4 +117,6 @@ jobs:
             LICENSE.txt
             buildroot/output/images/*.img
             buildroot/output/images/*.swu
+            *.img
+            *.swu
 
