@@ -76,9 +76,10 @@ jobs:
       - run: cd buildroot/output/images/; ./genSWU.sh ${{ env.RELEASE_VERSION }}
       - run: cd buildroot/output/images/; ./mkfw.sh ${{ env.RELEASE_VERSION_TPI }}
 
-      - run: ls -R buildroot/output/images
-      - run: cp -rf buildroot/output/images/*.swg .
-      - run: cp -rf buildroot/output/images/*.img .
+      - run: ls -R buildroot/output/
+      - run: cp -rf buildroot/output/images/*.swu .
+      - run: cp -rf buildroot/output/images/*.swu .
+      - run: rm -rf buildroot/
 
 
 
@@ -94,7 +95,6 @@ jobs:
       - run: sudo git push origin HEAD:master
 
       - id: upload
-        if: steps.new_version.conclusion == 'success'      
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.RELEASE_VERSION }}.swu
@@ -106,7 +106,6 @@ jobs:
           path: buildroot/output/images/${{ env.RELEASE_VERSION_TPI }}.img
 
       - id: release
-        if: steps.new_version.conclusion == 'success'      
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
