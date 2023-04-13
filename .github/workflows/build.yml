@@ -60,13 +60,14 @@ jobs:
       - id: add_ts
         run: chmod +x ./ctp-scripts/*.sh
       - run: ARCH=arm ./ctp-scripts/build.sh
-      - run: chmod +x buildroot/support/scripts/*
       - run: sudo chown -R $USER:$USER .; exit 0
       - run: sudo chown $USER:$USER -R .; exit 0
 
+      - run: chmod +x buildroot/support/scripts/*
       - id: build
         run: cd buildroot; make BR2_EXTERNAL="../br2t113pro" 100ask_t113-pro_spinand_core_defconfig
 #; make cjson-rebuild; make V=1
+      - run: chmod +x buildroot/support/dependencies/*
       - run: cd buildroot; make cjson-rebuild
       - run: cd buildroot; make V=1
 
