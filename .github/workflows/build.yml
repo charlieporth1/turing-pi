@@ -42,6 +42,7 @@ jobs:
       - run: rm -rf turing-pi/
       - run: git clone https://github.com/wenyi0421/turing-pi
       - run: bash -c "rm -rf turing-pi/.git; exit 0"
+      - run: bash -c "rm -rf *.swu; exit 0"
 
       - run: bash -c "cp -rf turing-pi/* .; exit 0"
       - run: bash -c "cp -rf turing-pi/.* .; exit 0"
