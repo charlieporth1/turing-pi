@@ -68,7 +68,6 @@ jobs:
 #; make cjson-rebuild; make V=1
       - run: make cjson-rebuild
       - run: make V=1
-#      - run: make cjson-rebuild; make V=1
 
       - run: sudo chown -R $USER:$USER .; exit 0
       - run: sudo chown $USER:$USER -R .; exit 0
