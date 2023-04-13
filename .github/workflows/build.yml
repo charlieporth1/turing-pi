@@ -41,6 +41,7 @@ jobs:
 
       - run: rm -rf turing-pi/
       - run: git clone https://github.com/wenyi0421/turing-pi
+      - run: sudo bash -c "sudo chown -R $USER:$USER .; exit 0"
       - run: bash -c "rm -rf turing-pi/.git; exit 0"
       - run: bash -c "rm -rf *.swu; exit 0"
 
