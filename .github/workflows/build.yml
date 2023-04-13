@@ -97,6 +97,7 @@ jobs:
       - run: cp -rf buildroot/output/images/*.swu .
       - run: cp -rf buildroot/output/images/*.swu .
       - run: rm -rf buildroot/output/
+      - run: rm -rf buildroot/dl/
 
 
 
