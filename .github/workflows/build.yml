@@ -57,11 +57,13 @@ jobs:
         run: chmod +x ./ctp-scripts/*.sh
       - run: ARCH=arm ./ctp-scripts/build.sh
       - run: sudo chown -R $USER:$USER .; exit 0
+      - run: sudo chown $USER:$USER -R .; exit 0
 
       - id: build
         run: cd buildroot; make BR2_EXTERNAL="../br2t113pro"  100ask_t113-pro_spinand_core_defconfig; make cjson-rebuild; make V=1
 
       - run: sudo chown -R $USER:$USER .; exit 0
+      - run: sudo chown $USER:$USER -R .; exit 0
 
       - id: update_config
         run: cp bmc4tpi/config/sun8iw20p1* buildroot/output/build/linux-5112fdd843715f1615703ca5ce2a06c1abe5f9ee/arch/arm/boot/dts/ 
