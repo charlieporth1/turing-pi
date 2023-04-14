@@ -95,8 +95,10 @@ jobs:
       - run: cd buildroot/output/images/; ./mkfw.sh ${{ env.RELEASE_VERSION }}
 
       - run: ls -R buildroot/output/
+
       - run: cp -rf buildroot/output/images/*.swu .
-      - run: cp -rf buildroot/output/images/*.swu .
+      - run: cp -rf buildroot/output/images/*.img .
+
       - run: rm -rf buildroot/output/
       - run: rm -rf buildroot/dl/
 
@@ -117,12 +119,12 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.RELEASE_VERSION }}.swu
-          path: buildroot/output/images/${{ env.RELEASE_VERSION }}.swu
+          path: ${{ env.RELEASE_VERSION }}.swu
 
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ env.RELEASE_VERSION }}.img
-          path: buildroot/output/images/${{ env.RELEASE_VERSION_TPI }}.img
+          path: ${{ env.RELEASE_VERSION_TPI }}.img
 
       - id: release
         uses: "marvinpinto/action-automatic-releases@latest"
