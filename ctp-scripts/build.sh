@@ -9,6 +9,7 @@ fi
 
 curl https://pkgs.tailscale.com/stable/${NAME}.tgz --output ${NAME}.tgz
 
+mkdir -p br2t113pro/board/100ask/rootfs_overlay/mnt/bin
 tar -xvf ${NAME}.tgz
 cp -rf ${NAME}/tailscale br2t113pro/board/100ask/rootfs_overlay/bin/
 cp -rf ${NAME}/tailscaled br2t113pro/board/100ask/rootfs_overlay/bin/
