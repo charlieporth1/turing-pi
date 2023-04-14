@@ -92,7 +92,7 @@ jobs:
 
       - run: ls -R buildroot/output/
       - run: cd buildroot/output/images/; ./genSWU.sh ${{ env.RELEASE_VERSION }}
-      - run: cd buildroot/output/images/; ./mkfw.sh ${{ env.RELEASE_VERSION_TPI }}
+      - run: cd buildroot/output/images/; ./mkfw.sh ${{ env.RELEASE_VERSION }}
 
       - run: ls -R buildroot/output/
       - run: cp -rf buildroot/output/images/*.swu .
