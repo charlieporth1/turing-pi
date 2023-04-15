@@ -49,7 +49,7 @@ jobs:
       - run: rm -rf *.swu; exit 0
 
 
-      - run: cp -rf turing-pi/* .; exit 0"
+      - run: cp -rf turing-pi/* .; exit 0
       - run: cp -rf turing-pi/.* .; exit 0
 
       - run: rm -rf turing-pi/; exit 0
