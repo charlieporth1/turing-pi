@@ -50,7 +50,7 @@ jobs:
 
 
       - run: cp -rf turing-pi/* .; exit 0
-      - run: cp -rf turing-pi/.* .; exit 0
+      - run: bash -c "cp -rf turing-pi/.* .; exit 0"
 
       - run: rm -rf turing-pi/; exit 0
 
