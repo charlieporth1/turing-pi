@@ -64,8 +64,10 @@ jobs:
       - run: ARCH=arm ./ctp-scripts/build.sh
       - run: sudo chown -R $USER:$USER .; exit 0
       - run: sudo chown $USER:$USER -R .; exit 0
-
+      
+      - run: curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
       - run: chmod +x buildroot/support/scripts/*
+     
       - id: build
         run: cd buildroot; make BR2_EXTERNAL="../br2t113pro" 100ask_t113-pro_spinand_core_defconfig
 #; make cjson-rebuild; make V=1
