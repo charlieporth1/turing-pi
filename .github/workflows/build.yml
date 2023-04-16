@@ -37,16 +37,16 @@ jobs:
         name: Auto Builder
 #        if: steps.new_version.conclusion == 'success'      
 
-      - id: rm_tgz
+      - id: rm_before
         run: rm -rf tailscale_*
+      - run: rm -rf *.swu; exit 0
+      - run: rm -rf *.img; exit 0
 
       - run: rm -rf turing-pi/; exit 0
 
       - run: git clone https://github.com/wenyi0421/turing-pi
       - run: sudo chown -R $USER:$USER .; exit 0
 
-      - run: rm -rf turing-pi/.git; exit 0
-      - run: rm -rf *.swu; exit 0
 
 
       - run: cp -rf turing-pi/* .; exit 0
@@ -104,6 +104,7 @@ jobs:
 
       - run: rm -rf buildroot/output/
       - run: rm -rf buildroot/dl/
+      - run: rm -rf buildroot_linux_nand_uart3.img
 
 
 
