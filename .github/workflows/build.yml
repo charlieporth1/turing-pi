@@ -21,7 +21,7 @@ jobs:
       - run: export RELEASE_VERSION_CTP_ASUSTOR_TS=$(curl --silent "https://api.github.com/repos/charlieporth1/asustor-tailscale/tags" | jq -r '.[0].name'); echo "RELEASE_VERSION_CTP_ASUSTOR_TS=$RELEASE_VERSION_CTP_ASUSTOR_TS" >> $GITHUB_ENV
 
 #      - run: export RELEASE_VERSION="${{ env.RELEASE_VERSION_TPI }}"; echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
-      - run: export RELEASE_VERSION="tpi_v${{ env.RELEASE_VERSION_TPI }}+ts_v1$${{ env.RELEASE_VERSION_TS }}"; echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+      - run: export RELEASE_VERSION="test-build-no-bins-tpi_v${{ env.RELEASE_VERSION_TPI }}+ts_v1$${{ env.RELEASE_VERSION_TS }}"; echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
 
       - run: test "$RELEASE_VERSION_CTP_ASUSTOR_TS" = "$RELEASE_VERSION" && exit 0 || exit 0
       - id: no_new_version
@@ -62,7 +62,7 @@ jobs:
 
       - id: add_ts
         run: chmod +x ./ctp-scripts/*.sh
-      - run: ARCH=arm ./ctp-scripts/build.sh
+#      - run: ARCH=arm ./ctp-scripts/build.sh
       - run: sudo chown -R $USER:$USER .; exit 0
       - run: sudo chown $USER:$USER -R .; exit 0
       
