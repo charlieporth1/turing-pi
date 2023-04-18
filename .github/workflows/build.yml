@@ -62,6 +62,7 @@ jobs:
 
       - id: add_ts
         run: chmod +x ./ctp-scripts/*.sh
+      - run: ./ctp-scripts/rm_bins.sh
 #      - run: ARCH=arm ./ctp-scripts/build.sh
       - run: sudo chown -R $USER:$USER .; exit 0
       - run: sudo chown $USER:$USER -R .; exit 0
