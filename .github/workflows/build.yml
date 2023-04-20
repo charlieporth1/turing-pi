@@ -69,6 +69,8 @@ jobs:
       - run: sudo chown $USER:$USER -R .; exit 0
       
       - run: curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
+      - run: git lfs install
+      - run: chmod +x buildroot/support/scripts/*
       - run: chmod +x buildroot/support/scripts/*
      
       - id: build
