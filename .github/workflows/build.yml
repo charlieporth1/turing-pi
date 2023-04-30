@@ -16,7 +16,7 @@ jobs:
 
       - id: new_version_tpi
         name: Early exit if no new version
-        run: export RELEASE_VERSION_TPI=$(curl --silent "https://api.github.com/repos/wenyi0421/turing-pi/tags" | jq -r '.[0].name' | awk -F'v' '{print $2}'); echo "RELEASE_VERSION_TPI=$RELEASE_VERSION_TPI" >> $GITHUB_ENV
+        run: export RELEASE_VERSION_TPI=$(curl --silent "https://api.github.com/repos/wenyi0421/turing-pi/tags" | jq -r '.[0].name' | awk -F'v' '{print $2}'); echo "RELEASE_VERSION_TPI=$RELEASE_VERSION_TPI.1" >> $GITHUB_ENV
 
       - run: export RELEASE_VERSION_CTP_ASUSTOR_TS=$(curl --silent "https://api.github.com/repos/charlieporth1/asustor-tailscale/tags" | jq -r '.[0].name'); echo "RELEASE_VERSION_CTP_ASUSTOR_TS=$RELEASE_VERSION_CTP_ASUSTOR_TS" >> $GITHUB_ENV
 
@@ -75,7 +75,6 @@ jobs:
      
       - id: build
         run: cd buildroot; make BR2_EXTERNAL="../br2t113pro" 100ask_t113-pro_spinand_core_defconfig
-#; make cjson-rebuild; make V=1
       - run: chmod +x -R buildroot/support/*
       - run: chmod +x buildroot/support/dependencies/*
       - run: chmod +x buildroot/support/gnuconfig/*
