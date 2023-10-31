@@ -3015,7 +3015,7 @@ endif
 ifneq "$(HOSTARCH)" "x86_64"
 /home/runner/work/turing-pi-wendy/turing-pi-wendy/buildroot/output/build/buildroot-config/auto.conf: FORCE
 endif
-ifneq "$(BR2_VERSION_FULL)" "-g17f93d4b-dirty"
+ifneq "$(BR2_VERSION_FULL)" "-g824778ed-dirty"
 /home/runner/work/turing-pi-wendy/turing-pi-wendy/buildroot/output/build/buildroot-config/auto.conf: FORCE
 endif
 
